@@ -1,7 +1,7 @@
 <script>
 
 import TheButton from './components/TheButton.vue';
-import MessageBox from './components/MessageBox.vue'
+import MessageBox from './components/MessageBox.vue';
 
 export default {
 
@@ -23,7 +23,7 @@ export default {
 
 
   mounted() {
-    const url = (parseInt(Math.random() * 1000 ) % 2 ) ? 'http://192.168.1.100:8080/price-scraper/dist/' : 'https://wpppppp.pl/';
+    const url = (parseInt(Math.random() * 1000 ) % 2 ) ? 'http://192.168.1.100:8080/price-scraper/dist/' : 'https://classic.bonito.pl/';
     fetch(url, {credentials: 'include', mode: 'cors'})
       .then(() => this.messages.push({type: 'success', msg: 'Konfiguracja prawidłowa, możemy zaczynać.'}, {type: 'danger', msg: 'testowy message.'}))
       .catch(e => {
