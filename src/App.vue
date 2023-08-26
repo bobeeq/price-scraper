@@ -1,7 +1,9 @@
 <script>
 
-import TheButton from './components/TheButton.vue';
-import MessageBox from './components/MessageBox.vue';
+import MessageList from './components/MessageList.vue';
+import BookstoreList from './components/BookstoreList.vue';
+
+import { useMessageStore } from '@/stores/messageStore';
 
 export default {
 
@@ -10,25 +12,30 @@ export default {
 
 
   components: {
-    TheButton,
-    MessageBox
+    MessageList,
+    BookstoreList,
   },
 
 
   data() {
     return {
-      messages: []
+      store: useMessageStore()
     }
   },
 
 
   mounted() {
-    const url = (parseInt(Math.random() * 1000 ) % 2 ) ? 'http://192.168.1.100:8080/price-scraper/dist/' : 'https://classic.bonito.pl/';
-    fetch(url, {credentials: 'include', mode: 'cors'})
-      .then(() => this.messages.push({type: 'success', msg: 'Konfiguracja prawidłowa, możemy zaczynać.'}, {type: 'danger', msg: 'testowy message.'}))
+    const url = (parseInt(Math.random() * 1000) % 2) ? 'http://192.168.1.100:8080/price-scraper/dist/' : 'https://classic.bonito.pl/';
+    fetch(url, { credentials: 'include', mode: 'cors' })
+      .then(() => {
+        this.store.addMessage('success', 'Konfiguracja prawidłowa, możemy zaczynać.');
+        this.store.addMessage('danger', 'testowy message.');
+      })
       .catch(e => {
         if (e.message == 'NetworkError when attempting to fetch resource.') {
-          this.messages.push({type: 'danger', msg: 'Nie będę mógł pobierać cen z bonito. Włącz CORS plugin i odśwież przeglądarkę.'}, {type: 'success', msg: 'testowy message.'});
+          this.store.addMessage('danger', 'Nie będę mógł pobierać cen z bonito. Włącz CORS plugin i odśwież przeglądarkę.');
+        
+          this.store.addMessage('success','testowy message.');
         }
       });
   }
@@ -38,13 +45,10 @@ export default {
 </script>
 
 <template>
-  Button powinien być tuta:
-  <TheButton text="Naciśnij kurła!" />
-
-
-
-
-  <MessageBox :messages="messages" />
+  <BookstoreList />
+  
+  <MessageList />
+  <button @click="store.addMessage((parseInt(Math.random() * 1000) % 2 == 0) ? 'danger' : 'success', 'dupa')">Add random message</button>
 </template>
 
 
@@ -54,5 +58,6 @@ body {
   color: #ddd;
   padding: 0;
   margin: 0;
+  font-size: 1.2em;
 }
 </style>
