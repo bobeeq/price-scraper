@@ -2,8 +2,6 @@
 
 import TheMessage from './TheMessage.vue';
 
-console.log(TheMessage);
-
 export default {
 
 
