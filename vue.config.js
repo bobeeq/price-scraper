@@ -1,5 +1,5 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
-  publicPath: '/price-scraper/dist'
+  publicPath: '/price-scraper/dist/'
 })
