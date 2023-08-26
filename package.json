@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && php custom-build.php",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "deploy": "npm run build && git add . && git commit -am \"deploy\" && git push"
   },
   "dependencies": {
     "core-js": "^3.8.3",
