@@ -9,7 +9,7 @@ export const useMessageStore = defineStore('messageStore', {
     },
     actions: {
         addMessage(type, msg, optionals) {
-            this.messages.push({type, msg, ...optionals});
+            this.messages.unshift({type, msg, ...optionals, time: (new Date()).toLocaleString('pl-PL').replace(/\d+\.\d+\.\d+, /, '')});
             this.setNewMessageState(true);
         },
         deleteMessage(message) {
@@ -17,6 +17,9 @@ export const useMessageStore = defineStore('messageStore', {
         },
         setNewMessageState(val) {
             this.newMessage = val;
+        },
+        deleteAll() {
+            this.messages = [];
         }
     }
 });

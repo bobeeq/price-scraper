@@ -2,9 +2,15 @@
 
 import MessageList from './components/MessageList.vue';
 import BookstoreList from './components/BookstoreList.vue';
+import Menu from './components/Menu.vue';
+import SandBox from './components/SandBox.vue';
+import EanLoader from './components/EanLoader.vue';
+import Prices from './components/Prices.vue';
+
 
 import { useMessageStore } from '@/stores/messageStore';
-import SandBox from './components/SandBox.vue';
+import { useMenuStore } from './stores/menuStore';
+
 
 export default {
 
@@ -15,30 +21,38 @@ export default {
   components: {
     MessageList,
     BookstoreList,
-    SandBox
+    SandBox,
+    Menu,
+    EanLoader,
+    Prices
   },
 
 
   data() {
     return {
-      store: useMessageStore(),
+      messageStore: useMessageStore(),
+      menuStore: useMenuStore(),
       sandbox: false
     }
   },
 
 
   mounted() {
+
+    this.menuStore.activeTab = 'Ustawienia Księgarń';
+
     const url = (parseInt(Math.random() * 1000) % 2) ? 'http://192.168.1.100:8080/price-scraper/dist/' : 'https://classic.bonito.pl/';
     fetch(url, { credentials: 'include', mode: 'cors' })
       .then(() => {
-        this.store.addMessage('success', 'Konfiguracja prawidłowa, możemy zaczynać.');
-        this.store.addMessage('danger', 'testowy message.');
+        this.messageStore.addMessage('success', 'Konfiguracja prawidłowa, możemy zaczynać.');
       })
       .catch(e => {
         if (e.message == 'NetworkError when attempting to fetch resource.') {
-          this.store.addMessage('danger', 'Nie będę mógł pobierać cen z bonito. Włącz CORS plugin i odśwież przeglądarkę.', { url: 'https://addons.mozilla.org/en-US/firefox/addon/cors-everywhere/' });
-
-          this.store.addMessage('success', 'testowy message.');
+          this.messageStore.addMessage(
+            'danger',
+            'UWAGA! Nie będę mógł pobierać cen z bonito. Włącz dodatek "Corse everywhere" w przeglądarce i odśwież stronę.',
+            { url: 'https://addons.mozilla.org/en-US/firefox/addon/cors-everywhere/' }
+          );
         }
       });
   }
@@ -48,11 +62,27 @@ export default {
 </script>
 
 <template>
-  <BookstoreList v-if="!sandbox"/>
-  <SandBox v-if="sandbox"/>
-  <MessageList v-if="!sandbox"/>
-  <button v-if="sandbox" @click="store.addMessage((parseInt(Math.random() * 1000) % 2 == 0) ? 'danger' : 'success', 'dupa')">Add random
-    message</button>
+  <Menu />
+
+  <div class="app-container">
+
+    <SandBox v-if="sandbox" />
+    <template v-else>
+      <EanLoader v-if="menuStore.activeTab == 'Dodaj Eany'" />
+      <BookstoreList v-if="menuStore.activeTab == 'Ustawienia Księgarń' && !sandbox" />
+      <Prices v-if="menuStore.activeTab == 'Pobrane Ceny' && !sandbox" />
+    </template>
+
+
+    <!-- DEBUG -->
+      <button @click="messageStore.addMessage((parseInt(Math.random() * 1000) % 2 == 0) ? 'danger' : 'success', 'dupa')"
+        style="position:fixed; left: 0; top: 300px;">
+        Add random message
+      </button>
+      <MessageList />
+    <!-- DEBUG -->
+
+  </div>
 </template>
 
 
@@ -63,5 +93,22 @@ body {
   padding: 0;
   margin: 0;
   font-size: 1.2em;
+}
+
+#price-scraper-app {
+  height: 97vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-container {
+  padding: 0;
+  margin: 0;
+  margin-top: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
 }
 </style>

@@ -3,7 +3,7 @@
 import { useMessageStore } from '../stores/messageStore';
 
 export default {
-    name: 'TheMessage',
+    name: 'Message',
 
     props: [
         'message'
@@ -12,7 +12,7 @@ export default {
 
     data() {
         return {
-            store: useMessageStore()
+            messageStore: useMessageStore()
         }
     }
 }
@@ -20,31 +20,29 @@ export default {
 
 <template>
     <div class="box" :class="message.type">
-        <div class="close" @click="store.deleteMessage(message)">&#10060;</div>
-        <slot />
+        <div class="close" @click="messageStore.deleteMessage(message)">❌</div>
+        <div>
+            <slot />
+        </div>
         <a target="_blank" v-if="message.url" :href="message.url">KLIK</a>
+        <div class="time">{{ message.time }}</div>
     </div>
 </template>
 
 <style scoped>
 .box {
-    border: 2px solid black;
-    padding: 10px 20px;
-    border-radius: 10px;
-    padding: 5x;
     position: relative;
-    max-width: 350px;
+    padding: 5px;
+    padding-right: 15px;
     display: flex;
     align-items: center;
     text-align: center;
     cursor: default;
-    filter: brightness(.9);
 }
 
 a, a:active, a:visited {
     display: block;
     padding: 10px;
-    border: 2px dashed white;
     background-color: maroon;
     color: white;
 }
@@ -54,16 +52,19 @@ a:hover {
 }
 
 .box:hover {
-    filter: brightness(1.1);
+    filter: contrast(1.3);
 }
 
 .close {
-    position: absolute;
-    right: -13px;
-    top: -13px;
+    margin: 0 20px 0 5px;
     cursor: pointer;
     user-select: none;
     font-size: 1.3em;
+}
+
+.time {
+    margin-left: auto;
+    padding-left: 20px;
 }
 
 .close:hover {
@@ -71,7 +72,7 @@ a:hover {
 }
 
 .danger {
-    background-color: red;
+    background-color: tomato;
     color: white;
 }
 

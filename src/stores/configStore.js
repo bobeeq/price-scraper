@@ -4,20 +4,20 @@ export const useConfigStore = defineStore('configStore', {
     state() {
         return {
             bookstores: {
-                gandalf: {
-                    name: 'Gandalf',
-                    download: {
-                        default: {
-                            possible: true,
-                            value: false,
-                        },
-                        google: {
-                            possible: true,
-                            value: false,
-                        }
-                    },
-                    searchURL: ``,
-                },
+                // gandalf: {
+                //     name: 'Gandalf',
+                //     download: {
+                //         default: {
+                //             possible: true,
+                //             value: false,
+                //         },
+                //         google: {
+                //             possible: true,
+                //             value: false,
+                //         }
+                //     },
+                //     searchURL: ``,
+                // },
                 bonito: {
                     name: 'Bonito',
                     download: {
@@ -46,20 +46,20 @@ export const useConfigStore = defineStore('configStore', {
                     },
                     searchURL: ``,
                 },
-                'świat_książki': {
-                    name: 'Świat Książki',
-                    download: {
-                        default: {
-                            possible: true,
-                            value: false,
-                        },
-                        google: {
-                            possible: true,
-                            value: false,
-                        }
-                    },
-                    searchURL: ``,
-                },
+                // 'świat_książki': {
+                //     name: 'Świat Książki',
+                //     download: {
+                //         default: {
+                //             possible: true,
+                //             value: false,
+                //         },
+                //         google: {
+                //             possible: true,
+                //             value: false,
+                //         }
+                //     },
+                //     searchURL: ``,
+                // },
                 empik: {
                     name: 'Empik',
                     download: {
@@ -75,9 +75,6 @@ export const useConfigStore = defineStore('configStore', {
                     searchURL: ``,
                 },
             },
-            eans: {
-                
-            }
         }
     },
     actions: {
@@ -98,6 +95,6 @@ export const useConfigStore = defineStore('configStore', {
         isBookstoreActive(bookstore) {
             return this.bookstores[bookstore].download['default'].value
                 || this.bookstores[bookstore].download['google'].value
-        }
+        },
     }
 });

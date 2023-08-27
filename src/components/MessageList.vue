@@ -2,7 +2,7 @@
 
 import { useMessageStore } from '../stores/messageStore'
 
-import TheMessage from './TheMessage.vue';
+import Message from './Message.vue';
 
 export default {
 
@@ -11,23 +11,18 @@ export default {
 
 
     components: {
-        TheMessage,
+        Message,
     },
 
 
     data() {
         return {
-            store: useMessageStore(),
-            hidden: false,
+            messageStore: useMessageStore(),
         }
     },
 
 
     methods: {
-        manageCloseClick() {
-            this.hidden = !this.hidden;
-            this.store.setNewMessageState(false);
-        }
     },
 
 
@@ -35,18 +30,14 @@ export default {
 </script>
 
 
-
-
 <template>
-    <div class="main" :class="{ 'hidden': hidden, 'new-message': store.newMessage }" v-show="store.messages.length > 0">
-
-        <div class="close" @click="manageCloseClick">
-            {{ hidden ? '🔼 '  + (store.newMessage ? 'NOWE ' : '') + 'KOMUNIKATY' : '🔽 ZWIŃ' }}
+    <div class="main" :class="{ 'hidden' : !messageStore.newMessage }" v-show="messageStore.messages.length > 0">
+        <div class="delete-all" @click="messageStore.deleteAll()">Wyczyść</div>
+        <div class="messages">
+            <Message v-show="!hidden || messageStore.newMessage" v-for="message of messageStore.messages" :message="message" :key="message.msg + message.time">
+                {{ message.msg }}
+            </Message>
         </div>
-
-        <TheMessage v-show="!hidden" v-for="message of store.messages" :message="message" :key="message.msg">
-            {{ message.msg }}
-        </TheMessage>
     </div>
 </template>
 
@@ -60,14 +51,11 @@ export default {
     max-height: 300px;
     width: 100%;
     box-sizing: border-box;
-    background-color: rgba(100, 100, 100, .4);
+    background-color: #666;
     color: black;
-    padding: 30px;
-    gap: 30px;
     overflow-y: auto;
-
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
 }
 
 .main.hidden {
@@ -75,21 +63,19 @@ export default {
     height: 30px;
 }
 
-.main.hidden.new-message .close {
-    color: red;
+.messages {
+    overflow-y: auto;
 }
 
-.close {
-    position: absolute;
-    left: 0;
-    top: 0;
-    cursor: pointer;
+.delete-all {
     user-select: none;
     color: white;
+    text-align: center;
+    padding: 5px;
 }
 
-.close:hover {
-    color: black;
-    filter: brightness(1.2);
+.delete-all:hover {
+    background-color: black;
+    cursor: pointer;
 }
 </style>

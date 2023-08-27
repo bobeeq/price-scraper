@@ -25,9 +25,7 @@ export default {
 
 <style scoped>
 div {
-    border-radius: 20px;
     padding: 5px 15px;
-    border: 1px solid black;
     background-color: tomato;
     display: flex;
     justify-content: center;
@@ -36,11 +34,10 @@ div {
     cursor: pointer;
     user-select: none;
     color: white;
-    filter: brightness(.85);
 }
 
 div:hover {
-    filter: brightness(1);
+    filter: contrast(1.3);
 }
 
 .active {
@@ -49,6 +46,7 @@ div:hover {
 }
 
 .disabled {
-    background-color: gray;
+    background-color: #666;
+    cursor: default;
 }
 </style>
