@@ -1,52 +1,52 @@
 <script>
+
+import BookstorePriceToggler from './BookstorePriceToggler.vue';
+import { useConfigStore } from '@/stores/configStore';
+
 export default {
     name: 'Bookstore',
 
 
-    props: [
-        'bookstore',
-    ],
-
-
-    data() {
-        return {
-            active: false,
-            withGoogle: false
+    props: {
+        bookstore: {
+            type: String,
+            required: true
         }
     },
 
 
-    methods: {
-        toggleGoogle() {
-            this.withGoogle = !this.withGoogle;
-            if(this.withGoogle) this.active = true;
-        },
-        toggleActive(){
-            this.active = !this.active;
-            if(!this.active) {
-                this.withGoogle = false;
-            }
+    components: {
+        BookstorePriceToggler
+    },
+
+
+    data() {
+        return {
+            configStore: useConfigStore()
+        }
+    },
+
+
+    computed: {
+        active() {
+            return this.configStore.isBookstoreActive(this.bookstore)
         }
     }
+
+
 }
 </script>
 
 <template>
-    <div class="main" :class="{ active }" @click="toggleActive">
-        <h3>{{ bookstore }}</h3>
-        <div
-            class="google-toggler"
-            :class="{ 'with-google': withGoogle }"
-            @click.stop="toggleGoogle"
-        >
-            Google
-        </div>
+    <div class="main" :class="{ active }">
+        <h3>{{ configStore.bookstores[bookstore].name }}</h3>
+        <BookstorePriceToggler v-for="download of ['default', 'google']" :key="download" :download="download"
+            :bookstore="bookstore" />
     </div>
 </template>
 
 
 <style scoped>
-
 .main {
     border: 2px solid black;
     border-radius: 20px;
@@ -71,24 +71,11 @@ h3 {
 
 .main.active {
     opacity: 1;
-}
-.google-toggler {
-    border-radius: 10px;
-    border: 2px solid black;
-    text-align: center;
-    background-color: #d9534f;
+    background: darkgreen;
     color: white;
-    padding: 20px;
-    cursor: pointer;
-    user-select: none;
-    filter: brightness(.9);
 }
 
-.google-toggler:hover {
-    filter: brightness(1.5);
-}
-
-.google-toggler.with-google {
+.main.active:hover {
     background-color: green;
 }
 </style>

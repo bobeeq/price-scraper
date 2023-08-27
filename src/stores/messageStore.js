@@ -8,8 +8,8 @@ export const useMessageStore = defineStore('messageStore', {
         }
     },
     actions: {
-        addMessage(type, msg) {
-            this.messages.push({type, msg});
+        addMessage(type, msg, optionals) {
+            this.messages.push({type, msg, ...optionals});
             this.setNewMessageState(true);
         },
         deleteMessage(message) {

@@ -4,6 +4,7 @@ import MessageList from './components/MessageList.vue';
 import BookstoreList from './components/BookstoreList.vue';
 
 import { useMessageStore } from '@/stores/messageStore';
+import SandBox from './components/SandBox.vue';
 
 export default {
 
@@ -14,12 +15,14 @@ export default {
   components: {
     MessageList,
     BookstoreList,
+    SandBox
   },
 
 
   data() {
     return {
-      store: useMessageStore()
+      store: useMessageStore(),
+      sandbox: false
     }
   },
 
@@ -33,9 +36,9 @@ export default {
       })
       .catch(e => {
         if (e.message == 'NetworkError when attempting to fetch resource.') {
-          this.store.addMessage('danger', 'Nie będę mógł pobierać cen z bonito. Włącz CORS plugin i odśwież przeglądarkę.');
-        
-          this.store.addMessage('success','testowy message.');
+          this.store.addMessage('danger', 'Nie będę mógł pobierać cen z bonito. Włącz CORS plugin i odśwież przeglądarkę.', { url: 'https://addons.mozilla.org/en-US/firefox/addon/cors-everywhere/' });
+
+          this.store.addMessage('success', 'testowy message.');
         }
       });
   }
@@ -45,10 +48,11 @@ export default {
 </script>
 
 <template>
-  <BookstoreList />
-  
-  <MessageList />
-  <button @click="store.addMessage((parseInt(Math.random() * 1000) % 2 == 0) ? 'danger' : 'success', 'dupa')">Add random message</button>
+  <BookstoreList v-if="!sandbox"/>
+  <SandBox v-if="sandbox"/>
+  <MessageList v-if="!sandbox"/>
+  <button v-if="sandbox" @click="store.addMessage((parseInt(Math.random() * 1000) % 2 == 0) ? 'danger' : 'success', 'dupa')">Add random
+    message</button>
 </template>
 
 

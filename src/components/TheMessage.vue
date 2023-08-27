@@ -22,6 +22,7 @@ export default {
     <div class="box" :class="message.type">
         <div class="close" @click="store.deleteMessage(message)">&#10060;</div>
         <slot />
+        <a target="_blank" v-if="message.url" :href="message.url">KLIK</a>
     </div>
 </template>
 
@@ -37,10 +38,22 @@ export default {
     align-items: center;
     text-align: center;
     cursor: default;
+    filter: brightness(.9);
+}
+
+a, a:active, a:visited {
+    display: block;
+    padding: 10px;
+    border: 2px dashed white;
+    background-color: maroon;
+    color: white;
+}
+
+a:hover {
+    filter: brightness(1.3);
 }
 
 .box:hover {
-    transform: scale(1.02);
     filter: brightness(1.1);
 }
 

@@ -1,6 +1,6 @@
 <script>
 
-import { useMessageStore } from '../stores/messageStore';
+import { useConfigStore } from '@/stores/configStore';
 
 import Bookstore from './Bookstore.vue';
 
@@ -15,19 +15,15 @@ export default {
 
     data() {
         return {
-            store: useMessageStore()
+            configStore: useConfigStore()
         }
     }
 }
 </script>
 
 <template>
-    <div class="main">
-        <Bookstore bookstore="Bonito"/>
-        <Bookstore bookstore="Gandalf"/>
-        <Bookstore bookstore="Tantis"/>
-        <Bookstore bookstore="Świat Książki"/>
-        <Bookstore bookstore="Empik"/>
+    <div class="main" >
+        <Bookstore v-for="bookstore of Object.keys(configStore.bookstores)" :key="bookstore" :bookstore="bookstore"/>
     </div>
 </template>
 
