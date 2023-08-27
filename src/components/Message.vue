@@ -20,12 +20,12 @@ export default {
 
 <template>
     <div class="box" :class="message.type">
-        <div class="close" @click="messageStore.deleteMessage(message)">❌</div>
+        <div class="time">{{ message.time }}</div>
         <div>
             <slot />
         </div>
         <a target="_blank" v-if="message.url" :href="message.url">KLIK</a>
-        <div class="time">{{ message.time }}</div>
+        <div class="close" @click="messageStore.deleteMessage(message)">❌</div>
     </div>
 </template>
 
@@ -33,6 +33,7 @@ export default {
 .box {
     position: relative;
     padding: 5px;
+    margin: 3px 0;
     padding-right: 15px;
     display: flex;
     align-items: center;
@@ -56,15 +57,16 @@ a:hover {
 }
 
 .close {
-    margin: 0 20px 0 5px;
+    margin: 0 5px 0 10px;
     cursor: pointer;
     user-select: none;
     font-size: 1.3em;
+    margin-left: auto;
 }
 
 .time {
-    margin-left: auto;
-    padding-left: 20px;
+    padding-left: 10px;
+    padding-right: 30px;
 }
 
 .close:hover {
