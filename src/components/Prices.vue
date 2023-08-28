@@ -14,7 +14,7 @@ export default {
 <template>
     <ul>
         <li v-for="ean of eanStore.eans" :key="ean.code">
-            {{ ean.code }}:
+            {{ ean.code }}: {{ ean.prices }}
         </li>
     </ul>
 </template>

@@ -47,8 +47,7 @@ export default {
 
     this.menuStore.activeTab = 'Ustawienia Księgarń';
 
-    const url = (parseInt(Math.random() * 1000) % 2) ? 'http://192.168.1.100:8080/price-scraper/dist/' : 'https://classic.bonito.pl/';
-    fetch(url, { credentials: 'include', mode: 'cors' })
+    fetch('https://google.pl/', { credentials: 'include', mode: 'cors' })
       .then(() => {
         this.messageStore.addMessage('success', 'Konfiguracja prawidłowa, możemy zaczynać.');
       })
@@ -83,10 +82,10 @@ export default {
 
 
     <!-- DEBUG -->
-    <button @click="messageStore.addMessage((parseInt(Math.random() * 1000) % 2 == 0) ? 'danger' : 'success', 'dupa')"
+    <!-- <button @click="messageStore.addMessage((parseInt(Math.random() * 1000) % 2 == 0) ? 'danger' : 'success', 'dupa')"
       style="position:fixed; left: 0; top: 300px;">
       Add random message
-    </button>
+    </button> -->
     <MessageList />
     <!-- DEBUG -->
 

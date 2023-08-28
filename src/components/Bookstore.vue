@@ -35,7 +35,7 @@ export default {
             return this.configStore.isBookstoreActive(this.bookstore)
         },
         left() {
-            return this.ajaxStore.threads[this.bookstore].queue.length;
+            return this.ajaxStore.threads[this.bookstore]?.queue.length;
         }
     }
 
@@ -50,11 +50,21 @@ export default {
             :bookstore="bookstore" />
         <div class="delays-text">opóźnienia</div>
         <div class="delays">
-            <input type="number" min="1" max="20" v-model="ajaxStore.threads[bookstore].minDelay">
-            <input type="number" min="1" max="20" v-model="ajaxStore.threads[bookstore].maxDelay">
+            <input
+                type="number"
+                min="1"
+                :max="configStore.bookstores[bookstore].delays.max"
+                v-model="configStore.bookstores[bookstore].delays.min"
+            >
+            <input
+                type="number"
+                :min="configStore.bookstores[bookstore].delays.min"
+                max="20"
+                v-model="configStore.bookstores[bookstore].delays.max"
+            >
         </div>
         <div class="left-in-queue">
-            <span>pozostało</span><span>{{ left }}</span>
+            <span>pozostało:</span><span>{{ left }}</span>
         </div>
     </div>
 </template>
@@ -85,8 +95,8 @@ export default {
 }
 
 .delays > input {
-    width: 50px;
-    font-size: 1.2em;
+    width: 40px;
+    transform: scale(1.5);
     text-align: center;
     padding: 0;
 }

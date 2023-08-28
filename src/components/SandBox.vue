@@ -1,6 +1,5 @@
 <script>
 
-import { useAjaxStore } from '@/stores/ajaxStore';
 import { useMessageStore } from '@/stores/messageStore';
 
 export default {
@@ -11,7 +10,6 @@ export default {
     data() {
         return {
             messageStore: useMessageStore(),
-            ajaxStore: useAjaxStore()
         }
     }
 }
@@ -19,8 +17,6 @@ export default {
 
 <template>
     <div class="wrapper">
-        <button @click="ajaxStore.startAjaxes()">GO</button>
-        <button @click="ajaxStore.stopAjaxes()">STOP</button>
     </div>
 </template>
 

@@ -15,7 +15,7 @@ export default {
 
     methods: {
         doLogin() {
-            if(this.password === 'gloselowiec') {
+            if(this.password === 'gloselowicz1') {
                 localStorage.setItem('auth', '6ec58d2f6c08aa9ec5eb84db49281b4c');
                 this.configStore.auth = true;
             } else {
@@ -30,7 +30,7 @@ export default {
 
 <template>
     <div class="login-box">
-        <!-- gloselowiec -->
+        <!-- gloselowicz1 -->
         <span>Hasło</span>
         <input type="password" autofocus v-model="password" @keyup.enter="doLogin">
         <button @click="doLogin">Zaloguj</button>

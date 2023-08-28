@@ -1,6 +1,7 @@
 <script>
 import TogglerBtn from './TogglerBtn.vue';
 import { useConfigStore } from '@/stores/configStore';
+import { useAjaxStore } from '@/stores/ajaxStore';
 
 export default {
 
@@ -27,7 +28,8 @@ export default {
 
     data() {
         return {
-            configStore: useConfigStore()
+            configStore: useConfigStore(),
+            ajaxStore: useAjaxStore()
         }
     },
 
