@@ -94,11 +94,13 @@ export const useAjaxStore = defineStore('ajaxStore', {
 
         startAjaxes() {
             if(this.isFinishedInterval) return;
+
             const threads = Object.values(this.threads);
             if(!threads.length) return;
 
-
+            
             for (const thread of threads) {
+                this.messageStore.addMessage('success', `Pobieranie cen dla ${thread.name} rozpoczęte...`);
                 thread.interval = setInterval(() => {
                     if (!thread.queue.length) {
                         this.messageStore.addMessage('success', 'Zakończono pobieranie dla ' + thread.name);

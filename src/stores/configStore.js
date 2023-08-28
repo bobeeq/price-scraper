@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 export const useConfigStore = defineStore('configStore', {
     state() {
         return {
+            auth: false,
             bookstores: {
                 // gandalf: {
                 //     name: 'Gandalf',

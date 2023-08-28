@@ -6,10 +6,12 @@ import Menu from './components/Menu.vue';
 import SandBox from './components/SandBox.vue';
 import EanLoader from './components/EanLoader.vue';
 import Prices from './components/Prices.vue';
+import Login from './components/Login.vue';
 
 
 import { useMessageStore } from '@/stores/messageStore';
 import { useMenuStore } from './stores/menuStore';
+import { useConfigStore } from './stores/configStore';
 
 
 export default {
@@ -24,7 +26,8 @@ export default {
     SandBox,
     Menu,
     EanLoader,
-    Prices
+    Prices,
+    Login
   },
 
 
@@ -32,12 +35,15 @@ export default {
     return {
       messageStore: useMessageStore(),
       menuStore: useMenuStore(),
-      sandbox: false
+      configStore: useConfigStore(),
+      sandbox: false,
     }
   },
 
 
   mounted() {
+
+    if(localStorage.getItem('auth') == '6ec58d2f6c08aa9ec5eb84db49281b4c') this.configStore.auth = true;
 
     this.menuStore.activeTab = 'Ustawienia Księgarń';
 
@@ -65,21 +71,23 @@ export default {
   <Menu />
 
   <div class="app-container">
-
     <SandBox v-if="sandbox" />
     <template v-else>
-      <EanLoader v-if="menuStore.activeTab == 'Dodaj Eany'" />
-      <BookstoreList v-if="menuStore.activeTab == 'Ustawienia Księgarń' && !sandbox" />
-      <Prices v-if="menuStore.activeTab == 'Pobrane Ceny' && !sandbox" />
+      <Login v-if="!configStore.auth" />
+      <template v-else>
+        <EanLoader v-if="menuStore.activeTab == 'Dodaj Eany'" />
+        <BookstoreList v-if="menuStore.activeTab == 'Ustawienia Księgarń' && !sandbox" />
+        <Prices v-if="menuStore.activeTab == 'Pobrane Ceny' && !sandbox" />
+      </template>
     </template>
 
 
     <!-- DEBUG -->
-      <button @click="messageStore.addMessage((parseInt(Math.random() * 1000) % 2 == 0) ? 'danger' : 'success', 'dupa')"
-        style="position:fixed; left: 0; top: 300px;">
-        Add random message
-      </button>
-      <MessageList />
+    <button @click="messageStore.addMessage((parseInt(Math.random() * 1000) % 2 == 0) ? 'danger' : 'success', 'dupa')"
+      style="position:fixed; left: 0; top: 300px;">
+      Add random message
+    </button>
+    <MessageList />
     <!-- DEBUG -->
 
   </div>
