@@ -1,43 +1,55 @@
 <script>
 import { useEanStore } from '@/stores/eanStore';
+import { useConfigStore } from '@/stores/configStore'
 
 export default {
     name: 'Prices',
     data() {
         return {
-            eanStore: useEanStore()
+            eanStore: useEanStore(),
+            configStore: useConfigStore()
         }
     }
 }
 </script>
 
 <template>
-    <ul>
-        <li v-for="ean of eanStore.eans" :key="ean.code">
-            {{ ean.code }}: {{ ean.prices }}
-        </li>
-        <div class="gandalf">
-            <div>GANDALF DO EXCELA:</div>
-            <div>
-                <table>
-                    <tr>
-                        <td>ean</td>
-                        <td>zwykła</td>
-                        <td>google</td>
-                    </tr>
-                    <tr v-for="ean of eanStore.eans" :key="ean.code">
-                        <td>{{ ean.code }}</td><td>{{ ean.prices?.gandalf?.default }}</td><td>{{ ean.prices?.gandalf?.google }}</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </ul>
+    <div class="table-wrapper">
+        <table>
+            <tr>
+                <th>ean</th>
+                <th v-for="[bookstore, download] of configStore.activeDownloads" :key="bookstore + '_' + download">
+                    {{ bookstore }}_{{ download }}
+                </th>
+            </tr>
+            <tr v-for="ean of eanStore.eans" :key="ean.code">
+                <td>{{ ean.code }}</td>
+                <td v-for="[bookstore, download] of configStore.activeDownloads" :key="bookstore + '_' + download">
+                    {{ ean.prices?.[bookstore]?.[download] }}
+                </td>
+            </tr>
+        </table>
+    </div>
 </template>
 
 <style scoped>
-.gandalf {
-    background-color: tomato;
-    margin: 30px;
-    width: 500px;
+.table-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+.table-wrapper table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #eee;
+    padding: 3px;
+}
+
+th {
+    background-color: #111;
 }
 </style>

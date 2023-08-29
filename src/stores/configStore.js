@@ -17,11 +17,11 @@ export const useConfigStore = defineStore('configStore', {
                             value: false,
                             async strategy(data) {
                                 const {ean, thread} = data;
-                                const res = await fetch(`https://www.gandalf.com.pl/sxa/${ean.code}`, {credentials: 'include', mode: 'cors'});
+                                const res = await fetch(`https://www.gandalf.com.pl/sxa/${ean.code}`, {mode: 'cors'});
                                 const text = await res.text();
                                 const dom = (new DOMParser()).parseFromString(text, 'text/html');
 
-                                const price = dom.querySelector('ul.internal-list span.current-price.f-20.bold-700')?.textContent.trim().replaceAll(/[^\d,]/g, '');
+                                const price = dom.querySelector('ul.internal-list span.current-price.f-20.bold-700')?.textContent.trim().replaceAll(/[^\d,]/g, '') ?? '-';
 
                                 const urlToProduct = dom.querySelector('ul.internal-list .info-box a:first-child')?.href;
                                 useConfigStore().bookstores['gandalf'].productPages[ean.code] = urlToProduct;
@@ -39,11 +39,11 @@ export const useConfigStore = defineStore('configStore', {
 
                                 if(!url) return;
                                 const sign = url.match(/\?/) ? '&' : '?';
-                                const res = await fetch(`${url}${sign}utm_source=google`, {credentials: 'include', mode: 'cors'});
+                                const res = await fetch(`${url}${sign}utm_source=google`, {mode: 'cors'});
                                 const text = await res.text();
                                 const dom = (new DOMParser()).parseFromString(text, 'text/html');
 
-                                const price = dom.querySelector('.internal-price-box .current-price strong')?.textContent.trim().replaceAll(/[^\d,]/g, '');
+                                const price = dom.querySelector('.internal-price-box .current-price strong')?.textContent.trim().replaceAll(/[^\d,]/g, '') ?? '-';
 
                                 if(!ean.prices[thread.name]) {
                                     ean.prices[thread.name] = {};
@@ -123,7 +123,7 @@ export const useConfigStore = defineStore('configStore', {
                                 const text = await res.text();
                                 const dom = (new DOMParser()).parseFromString(text, 'text/html');
 
-                                const price = dom.querySelector('div#productGridRow span.product-price')?.textContent.trim().replaceAll(/[^\d,]/g, '');
+                                const price = dom.querySelector('div#productGridRow span.product-price')?.textContent.trim().replaceAll(/[^\d,]/g, '') ?? '-';
                                 if(!ean.prices[thread.name]) {
                                     ean.prices[thread.name] = {};
                                 }
@@ -145,6 +145,21 @@ export const useConfigStore = defineStore('configStore', {
                     download: {
                         default: {
                             value: false,
+                            // async strategy(data) {
+                            //     const {ean, thread} = data;
+
+                            //     const res = await fetch(`https://www.swiatksiazki.pl/search/${ean.code}`, {
+                            //         mode: 'cors',
+                            //         credentials: 'include',
+                            //         headers: {'User-Agent': 'Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Googlebot/2.1; +http://www.google.com/bot.html) Chrome/W.X.Y.Z Safari/537.36'}
+                            //     })
+                            //     const text = await res.text();
+                            //     const dom = (new DOMParser()).parseFromString(text, 'text/html');
+
+                            //     const price = dom.querySelector('ul.ProductListPage .ProductPrice-PriceValue')?.textContent.replaceAll(/[^\d,]/, '') ?? '-';
+
+                            //     ean.prices[thread.name].default = price;
+                            // }
                         },
                         google: {
                             value: false,
@@ -152,8 +167,8 @@ export const useConfigStore = defineStore('configStore', {
                     },
                     searchURL: ``,
                 },
-                empik: {
-                    name: 'empik',
+                empik_lc: {
+                    name: 'empik_lc',
                     delays: {
                         min: 2,
                         max: 4
@@ -161,6 +176,22 @@ export const useConfigStore = defineStore('configStore', {
                     download: {
                         default: {
                             value: false,
+                            async strategy(data) {
+                                const {ean, thread} = data;
+                                fetch(`https://buybox.click/17929/buybox.json?number[]=${data.ean.code}`)
+                                .then(res => res.json()).then(jsonData => {
+                                    for(const row of Object.values(jsonData.data)) {
+                                        if(row.name != 'empik.com' || row.typeName != 'książka') continue;
+
+                                        
+                                        if(!ean.prices[thread.name]) {
+                                            ean.prices[thread.name] = {};
+                                        }
+
+                                        ean.prices[thread.name].default = row.price?.replace('.', ',') ?? '-';
+                                    }
+                                });
+                            }
                         },
                         google: {
                             value: false,
@@ -201,6 +232,19 @@ export const useConfigStore = defineStore('configStore', {
             }
 
             return false;
+        },
+
+        activeDownloads() {
+            const activeDownloads = [];
+            for(const bookstore in this.bookstores) {
+                for(const download in this.bookstores[bookstore].download) {
+                    if(this.bookstores[bookstore].download[download].value) {
+                        activeDownloads.push([bookstore, download]);
+                    }
+                }
+            }
+
+            return activeDownloads;
         }
     }
 });
