@@ -198,6 +198,48 @@ export const useConfigStore = defineStore('configStore', {
                     },
                     searchURL: ``,
                 },
+                smyk: {
+                    name: 'smyk',
+                    delays: {
+                        min: 5,
+                        max: 7
+                    },
+                    download: {
+                        default: {
+                            value: false,
+                            async strategy(data) {
+                                const {ean, thread} = data;
+                                const res = await fetch(`https://www.smyk.com/search?q=${ean.code}`, {credentials: 'include', mode: 'cors'});
+
+                                const text = await res.text();
+                                const dom = (new DOMParser()).parseFromString(text, 'text/html');
+                                console.log(thread);
+
+                                let price = '-';
+
+                                if(dom.querySelector('.grid__headline--find')?.textContent.match(/[^\d]1[^\d]/)) {
+                                    price = dom.querySelector('.price--new')?.textContent.trim().replaceAll(/[^\d,]/g, '') ?? '-';
+                                }
+                                if(!ean.prices[thread.name]) {
+                                    ean.prices[thread.name] = {};
+                                }
+                                ean.prices[thread.name].default = price;
+
+
+
+
+                                // const match = text.match(/script>\s*?window.PRELOADED_STATE\s*?=\s*?(?<json>.*?)\s*;\s*<\/script>/).groups?.json?.trim();
+                                // if(match) {
+                                //     console.log(JSON.parse(match));
+                                // }
+
+                            }
+                        },
+                        google: {
+                            value: false
+                        }
+                    }
+                }
             },
         }
     },
