@@ -32,7 +32,7 @@ export default {
 
 <template>
     <div class="main" :class="{ 'hidden' : !messageStore.newMessage }" v-show="messageStore.messages.length > 0">
-        <div class="delete-all" @click="messageStore.deleteAll()">Wyczyść</div>
+        <div class="delete-all" @click="messageStore.deleteAll()">Wyczyść komunikaty</div>
         <div class="messages">
             <Message v-show="!hidden || messageStore.newMessage" v-for="message of messageStore.messages" :message="message" :key="message.msg + message.time">
                 {{ message.msg }}

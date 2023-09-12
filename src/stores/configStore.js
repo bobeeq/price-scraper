@@ -113,6 +113,7 @@ export const useConfigStore = defineStore('configStore', {
                         min: 6,
                         max: 8
                     },
+                    productPages: {},
                     download: {
                         default: {
                             value: false,
@@ -123,6 +124,10 @@ export const useConfigStore = defineStore('configStore', {
                                 const dom = (new DOMParser()).parseFromString(text, 'text/html');
 
                                 const price = dom.querySelector('div#productGridRow span.product-price')?.textContent.trim().replaceAll(/[^\d,]/g, '') ?? '-';
+
+                                const urlToProduct = dom.querySelector('div#productGridRow h3.card-title.product-name > a')?.href;
+                                useConfigStore().bookstores['tantis'].productPages[ean.code] = urlToProduct;
+
                                 if(!ean.prices[thread.name]) {
                                     ean.prices[thread.name] = {};
                                 }
@@ -131,6 +136,23 @@ export const useConfigStore = defineStore('configStore', {
                         },
                         google: {
                             value: false,
+                            async strategy(data) {
+                                const {ean, thread} = data;
+                                const url = useConfigStore().bookstores['tantis'].productPages[ean.code];
+
+                                if(!url) return;
+                                const sign = url.match(/\?/) ? '&' : '?';
+                                const res = await fetch(`${url}${sign}utm_source=google`, {mode: 'cors'});
+                                const text = await res.text();
+                                const dom = (new DOMParser()).parseFromString(text, 'text/html');
+
+                                const price = dom.querySelector('ui-product-sidebar')?.getAttribute('price')?.trim().replaceAll(/[^\d,]/g, '') ?? '-';
+
+                                if(!ean.prices[thread.name]) {
+                                    ean.prices[thread.name] = {};
+                                }
+                                ean.prices[thread.name].google = price;
+                            }
                         }
                     },
                     searchURL: ``,
