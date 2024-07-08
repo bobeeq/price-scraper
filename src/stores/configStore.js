@@ -146,7 +146,7 @@ export const useConfigStore = defineStore('configStore', {
                                 const text = await res.text();
                                 const dom = (new DOMParser()).parseFromString(text, 'text/html');
 
-                                const price = dom.querySelector('ui-product-sidebar')?.getAttribute('price')?.trim().replaceAll(/[^\d,]/g, '') ?? '-';
+                                const price = dom.querySelector('#main-product-sidebar .ui-price-lg')?.textContent?.trim().replaceAll(/[^\d,]/g, '') ?? '-';
 
                                 if(!ean.prices[thread.name]) {
                                     ean.prices[thread.name] = {};
