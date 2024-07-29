@@ -1,0 +1,17 @@
+{
+    "name": "bobeeq/temp",
+    "autoload": {
+        "psr-4": {
+            "Bobeeq\\Temp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "bobeeq",
+            "email": "bobeeq@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.9"
+    }
+}
