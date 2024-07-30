@@ -53,6 +53,6 @@ export default {
         :disabled="!configStore.canBeDownloaded(bookstore, download)"
         :title="!configStore.canBeDownloaded(bookstore, download) ? 'Obsługa nie została zaimplementowana' : ''"
     >
-        {{ download == 'google' ? 'Google' : 'Zwykłe' }}
+        {{ download }}
     </TogglerBtn>
 </template>

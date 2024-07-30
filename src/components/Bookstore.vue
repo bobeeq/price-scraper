@@ -46,7 +46,7 @@ export default {
 <template>
     <div class="main" :class="{ active: active && left > 0 }">
         <h3>{{ configStore.bookstores[bookstore].name }}</h3>
-        <BookstorePriceToggler v-for="download of ['default', 'google']" :key="download" :download="download"
+        <BookstorePriceToggler v-for="download of ['default', 'google', 'ceneo']" :key="download" :download="download"
             :bookstore="bookstore" />
         <div class="delays-text">opóźnienia</div>
         <div class="delays">

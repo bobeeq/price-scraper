@@ -303,11 +303,22 @@ export const useConfigStore = defineStore('configStore', {
                                     ean.prices[thread.name] = {};
                                 }
 
-                                ean.prices[thread.name].default = `${price};${googlePrice};${ceneoPrice}`;
+                                ean.prices[thread.name].default = price;
+                                ean.prices[thread.name].google = googlePrice;
+                                ean.prices[thread.name].ceneo = ceneoPrice;
                             }
                         },
                         google: {
-                            value: false
+                            value: false,
+                            async strategy(data) {
+                                console.log(data);
+                            }
+                        },
+                        ceneo: {
+                            value: false,
+                            async strategy(data) {
+                                console.log(data);
+                            }
                         }
                     }
                 }
