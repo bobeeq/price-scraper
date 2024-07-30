@@ -297,10 +297,22 @@ export const useConfigStore = defineStore('configStore', {
                                 console.log(thread);
 
                                 let googlePrice = json.data.products.items[0]?.attributes
-                                    .filter(a => a.attribute_code == 'google_tax_adv_discount_price')[0]?.attribute_value.toFixed(2).replace('.', ',') ?? '-';
+                                    .filter(a => a.attribute_code == 'google_tax_adv_discount_price')[0]?.attribute_value;
+                                
+                                if(googlePrice) {
+                                    googlePrice = parseFloat(googlePrice).toFixed(2).replace('.', ',');
+                                } else {
+                                    googlePrice = "-";
+                                }
 
                                 let ceneoPrice = json.data.products.items[0]?.attributes
-                                .filter(a => a.attribute_code == 'ceneo_tax_adv_discount_price')[0]?.attribute_value.toFixed(2).replace('.', ',') ?? '-';
+                                .filter(a => a.attribute_code == 'ceneo_tax_adv_discount_price')[0]?.attribute_value;
+
+                                if(ceneoPrice) {
+                                    ceneoPrice = parseFloat(ceneoPrice).toFixed(2).replace('.', ',');
+                                } else {
+                                    ceneoPrice = "-";
+                                }
 
                                 if(!ean.prices[thread.name]) {
                                     ean.prices[thread.name] = {};
