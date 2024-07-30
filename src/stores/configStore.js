@@ -303,42 +303,11 @@ export const useConfigStore = defineStore('configStore', {
                                     ean.prices[thread.name] = {};
                                 }
 
-                                ean.prices[thread.name].default = `${price}\t${googlePrice}\t${ceneoPrice}`;
+                                ean.prices[thread.name].default = `${price};${googlePrice};${ceneoPrice}`;
                             }
                         },
                         google: {
-                            value: false,
-                            async strategy(data) {
-                                const {ean, thread} = data;
-                                const res = await fetch(`https://bookland.com.pl/graphql?hash=2333236514&sort_1={"availability":"DESC"}&filter_1={"price":{},"customer_group_id":{"eq":"0"}}&search_1="${ean.code}"&pageSize_1=24&currentPage_1=1&_currency=""&gclid=google&utm_source=google&utm_medium=cpc`, {credentials: 'include', mode: 'cors'});
-
-                                const json = await res.json();
-                                console.log(thread);
-
-                                let googlePrice = json.data.products.items[0]?.attributes
-                                    .filter(a => a.attribute_code == 'google_tax_adv_discount_price')[0]?.attribute_value;
-                                
-                                if(googlePrice) {
-                                    googlePrice = parseFloat(googlePrice).toFixed(2).replace('.', ',');
-                                } else {
-                                    googlePrice = "-";
-                                }
-
-                                let ceneoPrice = json.data.products.items[0]?.attributes
-                                .filter(a => a.attribute_code == 'ceneo_tax_adv_discount_price')[0]?.attribute_value;
-
-                                if(ceneoPrice) {
-                                    ceneoPrice = parseFloat(ceneoPrice).toFixed(2).replace('.', ',');
-                                } else {
-                                    ceneoPrice = "-";
-                                }
-
-                                if(!ean.prices[thread.name]) {
-                                    ean.prices[thread.name] = {};
-                                }
-
-                                ean.prices[thread.name].google = `${googlePrice}\t${ceneoPrice}`;
-                            }
+                            value: false
                         }
                     }
                 }
