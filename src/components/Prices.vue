@@ -24,9 +24,9 @@ export default {
             </tr>
             <tr v-for="ean of eanStore.eans" :key="ean.code">
                 <td>{{ ean.code }}</td>
-                <td v-for="[bookstore, download] of configStore.activeDownloads" :key="bookstore + '_' + download">
-                    <pre>{{ ean.prices?.[bookstore]?.[download] }}</pre>
-                </td>
+                <td v-for="[bookstore, download] of configStore.activeDownloads" :key="bookstore + '_' + download">{{
+                    ean.prices?.[bookstore]?.[download]
+                }}</td>
             </tr>
         </table>
     </div>
