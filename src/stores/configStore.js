@@ -273,7 +273,8 @@ export const useConfigStore = defineStore('configStore', {
                             value: false,
                             async strategy(data) {
                                 const {ean, thread} = data;
-                                const res = await fetch(`https://bookland.com.pl/graphql?hash=2333236514&sort_1={"availability":"DESC"}&filter_1={"price":{},"customer_group_id":{"eq":"0"}}&search_1="${ean.code}"&pageSize_1=24&currentPage_1=1&_currency=""`, {credentials: 'include', mode: 'cors'});
+                                // const res = await fetch(`https://bookland.com.pl/graphql?hash=2333236514&sort_1={"availability":"DESC"}&filter_1={"price":{},"customer_group_id":{"eq":"0"}}&search_1="${ean.code}"&pageSize_1=24&currentPage_1=1&_currency=""`, {credentials: 'include', mode: 'cors'});
+                                const res = await fetch(`https://bookland.com.pl/graphql?hash=1691232031&sort_1={"availability":"DESC"}&filter_1={"price":{},"customer_group_id":{"eq":"0"}}&search_1="${ean.code}"&pageSize_1=24&currentPage_1=1&_currency=""`, {credentials: 'include', mode: 'cors'});
 
                                 const json = await res.json();
                                 console.log(thread);
