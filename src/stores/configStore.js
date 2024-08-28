@@ -277,6 +277,7 @@ export const useConfigStore = defineStore('configStore', {
 
                                 const json = await res.json();
                                 console.log(thread);
+                                console.log(json);
 
                                 let price = json.data.products.items[0]?.price_range.maximum_price.final_price.value.toFixed(2).replace('.', ',') ?? '-';
 
