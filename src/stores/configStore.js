@@ -337,10 +337,10 @@ export const useConfigStore = defineStore('configStore', {
             this.bookstores[bookstore].download[type].value = false;
         },
         canBeDownloaded(bookstore, type) {
-            return this.bookstores[bookstore].download[type].strategy;
+            return this.bookstores[bookstore].download[type]?.strategy;
         },
         isDownloading(bookstore, type) {
-            return this.bookstores[bookstore].download[type].value;
+            return this.bookstores[bookstore].download[type]?.value;
         },
         isBookstoreActive(bookstore) {
             return this.bookstores[bookstore].download['default'].value
